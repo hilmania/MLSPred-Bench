@@ -1,28 +1,5 @@
 # Panduan Instalasi MLSPred-Bench - Solusi Error Requirements
 
-## Masalah yang Ditemukan
-
-Berdasarkan analisis kode dan error yang Anda alami, ada beberapa masalah utama:
-
-1. **`pkg_resources==0.0.0`** - Package ini tidak valid dan menyebabkan error instalasi
-2. **Konflik versi dependencies** - Beberapa package memerlukan Python versi yang berbeda
-3. **Pinned versions yang terlalu spesifik** - Menyebabkan konflik dengan sistem yang berbeda
-
-## Solusi yang Diterapkan
-
-### 1. Fixed Requirements.txt
-File `requirements.txt` telah diperbaiki dengan:
-- Menghapus `pkg_resources==0.0.0` yang tidak valid
-- Menggunakan version ranges alih-alih pinned versions
-- Memastikan kompatibilitas dengan Python 3.8-3.11
-- Mengelompokkan dependencies berdasarkan prioritas
-
-### 2. Script Testing
-Dibuat `test_imports.py` untuk memverifikasi semua dependencies dapat diimport dengan benar.
-
-### 3. Setup Script
-Dibuat `setup.sh` untuk memudahkan instalasi environment di masa depan.
-
 ## Cara Menggunakan
 
 ### Opsi 1: Manual Installation
