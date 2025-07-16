@@ -3,7 +3,7 @@
 #-------------------------- Sec. 1: Import Libraries --------------------------#
 '''
 print("Importing Libraries ...", end = " ")
-#import pandas as pd
+#import pandas as pd 
 import numpy as np
 import random
 import time
@@ -66,7 +66,7 @@ try:
 except:
     tusz_path = "/disk/dragon-storage/homes/eeg_data/raw_eeg_data/"
     print("No source path given; using default path!")
-
+    
 try:
     base_path = sys.argv[2]
 except:
@@ -87,13 +87,13 @@ try:
     print("Found TUSZ edf records directory!")
 except:
     print("Could not find TUSZ edf records directory!")
-
+    
 try:
     docs_path_list = os.listdir(docs_path)
     print("Found TUSZ docs sub-directory!")
 except:
     print("Could not find TUSZ docs sub-directory!")
-
+    
 print()
 print("TUSZ path:\t\t", tusz_path)
 print("TUSZ edf records path :\t", raw_data_path)
@@ -109,7 +109,7 @@ if not os.path.isdir(base_path):
         print("Could not create directory!")
 else:
     print("Target base path exists!")
-
+    
 meta_path = base_path + "meta_data/"
 if not os.path.isdir(meta_path):
     print("Creating meta-data storage sub-directory ...", end =" ")
@@ -117,7 +117,7 @@ if not os.path.isdir(meta_path):
     print("Done! Diectory Created.")
 else:
     print("Meta-data path exists!")
-
+    
 data_path = base_path + "raweeg/"
 if not os.path.isdir(data_path):
     print("Creating raw EEG storage sub-directory ...", end =" ")
@@ -125,7 +125,7 @@ if not os.path.isdir(data_path):
     print("Done! Diectory Created.")
 else:
     print("Raw EEG path exists!")
-
+    
 mont_path = base_path + "montage/"
 if not os.path.isdir(mont_path):
     print("Creating montage sub-directory ...", end =" ")
@@ -133,7 +133,7 @@ if not os.path.isdir(mont_path):
     print("Done! Diectory Created.")
 else:
     print("Montage path exists!")
-
+    
 intr_path = base_path + "interim/"
 if not os.path.isdir(intr_path):
     print("Creating interim directory ...", end =" ")
@@ -141,7 +141,7 @@ if not os.path.isdir(intr_path):
     print("Done! Directory Created.")
 else:
     print("Interim path exists!")
-
+    
 sf00_path = base_path + "fld_sng/"
 if not os.path.isdir(sf00_path):
     print("Creating single-fold directory ...", end =" ")
@@ -197,10 +197,10 @@ for path_type in dir_name_list: # Loop 1
         sessions_path = path_name+p           # create a session path
         session_list = sorted(os.listdir(sessions_path)) # a list of session paths for each patient
         sessions_path_list = []               # Build the session path
-        for s in session_list:
-            sessions_path_list.append(sessions_path+'/'+s)
+        for s in session_list: 
+            sessions_path_list.append(sessions_path+'/'+s) 
         for s in sessions_path_list:          # Loop 3
-            session_id = s.split('/')[-1]
+            session_id = s.split('/')[-1] 
             recordings_path = sorted(os.listdir(s))
             if len(recordings_path)>1:
                 list_rec_paths_more_than_one.append(s)
@@ -211,8 +211,8 @@ for path_type in dir_name_list: # Loop 1
                 label_paths_count_dict[rec_suffix] += 1
                 all_ids_list.append(f'{id_type_prefix[path_key]}_{patient_id[-3:]}_{session_id[:4]}_{rec_suffix}')
                 all_ids_dict[path_key].append(all_ids_list[-1])
-                print(f'Extracting for patient ID {patient_id} from session ID {session_id}.', end = " ")
-                print(f'The combined session ID is {all_ids_list[-1]}.', end  = "\r")
+                print(f'Extracting for patient ID {patient_id} from session ID {session_id}.', end = " ")  
+                print(f'The combined session ID is {all_ids_list[-1]}.', end  = "\r") 
                 edf_file_pth_dict[all_ids_list[-1]] = []
                 csv_file_pth_dict[all_ids_list[-1]] = []
                 temp_edf_list = []
@@ -234,7 +234,7 @@ for path_type in dir_name_list: # Loop 1
         time.sleep(0.1)
     print(f'\nDone for {path_key} data.')
     print()
-
+    
 print(f'There are {len(edf_file_pth_dict.keys())} sub-directories comprising EDF files.')
 print(f'There are {len(csv_file_pth_dict.keys())} sub-directories comprising CSV files.')
 print(f'There are {len(all_ids_list)} ID\'s of the form typePrefix_patientID_SessionID_montageType.')
@@ -290,14 +290,14 @@ for dkey in all_ids_list:
     #print(dkey, end = " ")
     csv_file_names_list = csv_file_pth_dict[dkey] # Get the csv files for each customized session ID
     if len(csv_file_names_list) > 0: # proceed if we have at least one recording in a session
-        pat_id = csv_file_names_list[0].split('/')[-4]
+        pat_id = csv_file_names_list[0].split('/')[-4] 
         ses_id = csv_file_names_list[0].split('/')[-3]
     all_sessions_duration_dict[dkey] = [] # Create an empty list ot record durations of each session
     all_sessions_cumldurs_dict[dkey] = [] # Define empty list for cumulative durations; can be initialized to zero too.
     X = f'Patient: {pat_id} Session: {ses_id}\n'
     for f in csv_file_names_list:
         with open(f) as my_csv:
-            text_blob = my_csv.read().split('\n') # get
+            text_blob = my_csv.read().split('\n') # get 
             file_name_edf = f.split('/')[-1][:-7]+'.edf'
             file_dirs_edf = '/'.join(f.split('/')[-2:-1])+'/'+file_name_edf
             cur_dur = float(text_blob[2].split('=')[-1].strip()[:-5])
@@ -330,7 +330,7 @@ print("\nDone saving Metadata for all sessions of each patient in train, dev and
 #--- Sec. 6: Identify the channels and sampling rates used for each session ---#
 
 '''
-In the following cell, we are going to make a create the following:
+In the following cell, we are going to make a create the following: 
 1. A set of all sampling rates observed across 7,377 edf records
 2. A list of frequency of occurrence of each sampling rate
 3. A set of all channels from the required montage channels that are observed
@@ -341,13 +341,13 @@ In the following cell, we are going to make a create the following:
 7. A dictionary of lists of channel sets per session
 8. A dictionary of lists of channel counts per session
 
-We will build up the sampling rate set as we go along, and add to the count list each
-time there is a new sampling rate and intialize the count to 1. Once the count is initialized,
-each time that particular sampling rate is observed, we append the corresponding count.
-A similar strategy is employed for the channel names and the channel counts.
+We will build up the sampling rate set as we go along, and add to the count list each 
+time there is a new sampling rate and intialize the count to 1. Once the count is initialized, 
+each time that particular sampling rate is observed, we append the corresponding count. 
+A similar strategy is employed for the channel names and the channel counts. 
 
 Items or features that will be added soon:
-1. A dictionary of each channel observed and the number of time it appears; to populate missing channels
+1. A dictionary of each channel observed and the number of time it appears; to populate missing channels 
 2. The number of times the same session has a different sampling rate over multiple edf records
 3. A dictionary of channels belonging to each session (similar to sampling rate)
     A. May be a dictionary of dictionary or a dictionary of lists
@@ -356,14 +356,14 @@ Items or features that will be added soon:
 
 print("Figuring out channel names and sampling rates...")
 
-channels_to_include = ['EEG T6-REF', 'EEG T5-REF', 'EEG T4-REF', 'EEG T3-REF',
-                       'EEG P4-REF', 'EEG P3-REF', 'EEG O2-REF', 'EEG O1-REF',
-                       'EEG FP2-REF', 'EEG FP1-REF', 'EEG F8-REF', 'EEG F7-REF',
-                       'EEG F4-REF', 'EEG F3-REF', 'EEG CZ-REF', 'EEG C4-REF',
-                       'EEG C3-REF', 'EEG T6-LE', 'EEG T5-LE', 'EEG T4-LE',
-                       'EEG T3-LE', 'EEG P4-LE', 'EEG P3-LE', 'EEG O2-LE',
-                       'EEG O1-LE', 'EEG FP2-LE', 'EEG FP1-LE', 'EEG F8-LE',
-                       'EEG F7-LE', 'EEG F4-LE', 'EEG F3-LE', 'EEG CZ-LE',
+channels_to_include = ['EEG T6-REF', 'EEG T5-REF', 'EEG T4-REF', 'EEG T3-REF', 
+                       'EEG P4-REF', 'EEG P3-REF', 'EEG O2-REF', 'EEG O1-REF', 
+                       'EEG FP2-REF', 'EEG FP1-REF', 'EEG F8-REF', 'EEG F7-REF', 
+                       'EEG F4-REF', 'EEG F3-REF', 'EEG CZ-REF', 'EEG C4-REF', 
+                       'EEG C3-REF', 'EEG T6-LE', 'EEG T5-LE', 'EEG T4-LE', 
+                       'EEG T3-LE', 'EEG P4-LE', 'EEG P3-LE', 'EEG O2-LE', 
+                       'EEG O1-LE', 'EEG FP2-LE', 'EEG FP1-LE', 'EEG F8-LE', 
+                       'EEG F7-LE', 'EEG F4-LE', 'EEG F3-LE', 'EEG CZ-LE', 
                        'EEG C4-LE', 'EEG C3-LE']
 
 channels_count_ar_dict = {}
@@ -460,7 +460,7 @@ for dkey in all_ids_list:
             print(f"New Channel Count Observed: {chan_count_set}")
             channels_freq_list.append(chans_set_diff.pop())
             channels_freq_cnts.append(0)
-            print_abv_pat_extra_line_flag = True
+            print_abv_pat_extra_line_flag = True           
         for i in range(len(sampling_rate_list)):
             if int(X1.info["sfreq"]) == sampling_rate_list[i]:
                 sampling_rate_cnts[i] += 1
@@ -522,9 +522,9 @@ for dkey in all_ids_list:
     num_of_edf_recs = len(edf_file_names_list)
     temp_array = np.zeros((17, totl_num_samp_dict[dkey]))
     for i in range(num_of_edf_recs):
-        f = edf_file_names_list[i]
+        f = edf_file_names_list[i] 
         recording_number_str = f.split('.')[0][-3:]
-
+            
         X1 = mne.io.read_raw_edf(f,include=channels_to_include, verbose="Warning")
         Y = X1._read_segment()
         try:
@@ -540,25 +540,25 @@ for dkey in all_ids_list:
             print("Could not assign for: ", dkey)
     if not temp_array is None and temp_array.shape[1] > 0:
         final_ids_with_data_list.append(dkey)
-        np.save(data_path+dkey+'.npy', temp_array)
+        np.save(data_path+dkey+'.npy', temp_array)        
         print(f"Saving concatenated raw EEG Data for patient ID {dkey:s} record # {i+1:02d}/{num_of_edf_recs:02d}",
-              f"... Done for {all_ids_list.index(dkey)+1}/{len(all_ids_list)}", end = '\r')
+              f"... Done for {all_ids_list.index(dkey)+1}/{len(all_ids_list)}", end = '\r')  
     else:
         print(200*" ", end ="\r")
         print(f"Patient aaaaa{dkey[:3]} Session {dkey[8:12]} is EMPTY!")
-
+        
 #******************************************************************************#
 #----------- Sec. 8: Calculate Montages from raw EEG data and store -----------#
 '''
 In this next cell, we try to do several tasks leading to the creation of montages.
-We read the reference type of the raw EEG recording from the file name, and figure
-out which channel to use.
+We read the reference type of the raw EEG recording from the file name, and figure 
+out which channel to use. 
 
-In the following cell, we figure out the orders of the channels, and use a dictionary
+In the following cell, we figure out the orders of the channels, and use a dictionary 
 structure to map each channel to a specific corresponding row in the ".npy" file.
 
-First, we create a mapping from channel to row number for each reference type: LE and AR.
-Next, we use the montage description to define the "difference" pairs as a list of tuples.
+First, we create a mapping from channel to row number for each reference type: LE and AR. 
+Next, we use the montage description to define the "difference" pairs as a list of tuples. 
 In total, there are 22 lists.
 '''
 montage_lst_tcp_ar3 = []
@@ -574,18 +574,18 @@ with open(docs_path + "03_tcp_ar_a_montage.txt") as f:
             # print(temp_ch1, temp_ch2)
             channel_lst_tcp_ar3.append((temp_ch2, temp_ch1))
             channel_set_tcp_ar3.add(temp_ch2)
-            channel_set_tcp_ar3.add(temp_ch1)
+            channel_set_tcp_ar3.add(temp_ch1)  
 
 print("AR3 montage (lowest common number of channels)")
 for x in channel_lst_tcp_ar3:
     print(f'{x[0]:7s} - {x[1]:>7s}', end = "     ")
 print("\n")
 
-channels_to_include = ['EEG T6', 'EEG T5', 'EEG T4', 'EEG T3', 'EEG P4', 'EEG P3', 'EEG O2', 'EEG O1', 'EEG FP2',
+channels_to_include = ['EEG T6', 'EEG T5', 'EEG T4', 'EEG T3', 'EEG P4', 'EEG P3', 'EEG O2', 'EEG O1', 'EEG FP2', 
                        'EEG FP1', 'EEG F8', 'EEG F7', 'EEG F4', 'EEG F3', 'EEG CZ', 'EEG C4', 'EEG C3']
 
 channel_index_dict = {}
-count_chs = 0
+count_chs = 0   
 for ch in channels_to_include:
     channel_index_dict[ch] = count_chs
     count_chs += 1
@@ -614,8 +614,8 @@ for dkey in all_ids_list:
         assert temp_read_array.shape[0] == 17 and temp_read_array.shape[1] > 0
     except:
         print("Could not assert one or more of data or number of channels!")
-
-
+    
+    
     temp_write_array = np.zeros((20, temp_read_array.shape[1]))
     for i in range(len(montage_rows_tuple_list)):
         ind_ch1 = montage_rows_tuple_list[i][0]
@@ -625,61 +625,61 @@ for dkey in all_ids_list:
         np.save(mont_file_path, temp_write_array)
     except:
         print("\nCould not save!")
-
-
+    
+        
     print(f"For ID {dkey}, saved data of shape: {temp_read_array.shape[0]:2d} x {temp_read_array.shape[1]:<12d}",
           f"Progress {count_keys}/{len(all_ids_list)}", end = "\r")
 
 #******************************************************************************#
 #------------ Sec. 9: Analyse the metadata to build the benchmarks ------------#
 '''
-In this notebook, we use the previously created metadata files to extract the raw data
-from the set of edf files in each session, concatenate the raw data from each session
-into a single long matrix and then store it in NumPy ('.npy') format.
+In this notebook, we use the previously created metadata files to extract the raw data 
+from the set of edf files in each session, concatenate the raw data from each session 
+into a single long matrix and then store it in NumPy ('.npy') format. 
 
-In the following cells, we store the text blobs for each session in a dictionary where
-the keys are the complete session ID's. Because the session ID is also the name of the
-text file comprising the metadata for that session, it is easy to extract the complete
-session ID as defined prior. The complete session ID is comprised of four fields, each
-separated by an underscore.
-
-The first field comprises three letters that indicate the dataset from which it was taken
-(training - trn, testing - tst or development - vld because we consider the development
-set to be the validation dataset. The second field identifies the patient ID using only
-the last three alphabets of the anonymized patient ID. Only these 3 letters are unique
-out of the 8 letter alphabetical ID, the first 5 are alays 'aaaaa' for all patients.
-The third field identifies the session number with 4 characters. The first character is
-always 's' followed by 3 characters of an integer number in 03d format starting from 001.
-
-The last field identifies the electrode reference type using where there are four different
-possible configurations. The 2 reference types used are the average referenced (AR) or
-linked ear (LE) reference and in each reference type, some patients have 2 electrodes
-(the A1-Ref and A2-Ref) which leads to a total of 4 possibilities. AR1 and LE2 are
-respectively configurations where electrodes are available.
-
-The text blobs are stored in a dictionary called 'txt_blks_annot_dict'. The keys to the
-dictionary will simply be the session ID's. In another dictionary called 'ind_lsts_nwlns_dict',
-we also store the indexes of each newline character that occurs in the text file. This was
-used for the parser developed for CHB-MIT but is obsolete now. We keep this variable in
-case it is needed in the future. We also store a list of customized patient ID's which
+In the following cells, we store the text blobs for each session in a dictionary where 
+the keys are the complete session ID's. Because the session ID is also the name of the 
+text file comprising the metadata for that session, it is easy to extract the complete 
+session ID as defined prior. The complete session ID is comprised of four fields, each 
+separated by an underscore. 
+    
+The first field comprises three letters that indicate the dataset from which it was taken 
+(training - trn, testing - tst or development - vld because we consider the development 
+set to be the validation dataset. The second field identifies the patient ID using only 
+the last three alphabets of the anonymized patient ID. Only these 3 letters are unique 
+out of the 8 letter alphabetical ID, the first 5 are alays 'aaaaa' for all patients. 
+The third field identifies the session number with 4 characters. The first character is 
+always 's' followed by 3 characters of an integer number in 03d format starting from 001. 
+    
+The last field identifies the electrode reference type using where there are four different 
+possible configurations. The 2 reference types used are the average referenced (AR) or 
+linked ear (LE) reference and in each reference type, some patients have 2 electrodes 
+(the A1-Ref and A2-Ref) which leads to a total of 4 possibilities. AR1 and LE2 are 
+respectively configurations where electrodes are available.    
+    
+The text blobs are stored in a dictionary called 'txt_blks_annot_dict'. The keys to the 
+dictionary will simply be the session ID's. In another dictionary called 'ind_lsts_nwlns_dict', 
+we also store the indexes of each newline character that occurs in the text file. This was 
+used for the parser developed for CHB-MIT but is obsolete now. We keep this variable in 
+case it is needed in the future. We also store a list of customized patient ID's which 
 is simply the first 2 fields of each sesison ID.
 
-Next, we parse the text blobs to extract the following useful information for each session:
-the name of each edf file for each record, the duration of that particular recording, the
-number of seizures obsereved and the start and end times of each seizure.
+Next, we parse the text blobs to extract the following useful information for each session: 
+the name of each edf file for each record, the duration of that particular recording, the 
+number of seizures obsereved and the start and end times of each seizure. 
 
-Based on this information, we iteratively determine the cumulative duration of a session
-comprising multiple recordings and for each record, we store a 'cumulative' start time of
-a seizure. Let $t_{start}$ denote the start time of a seizure and $t_{end}$ be the end of
-the ictal duratuion. For example, let us consider 2 recordings, one 2400 seconds long and
-the second 3600 seconds long. If seizure 1 has a labeled start time of 1800 seconds in
-recording 1, the start time of seizure 1 is 1800 seconds. However, if seizure 2 has a
-labeled start time of 1800 seconds, the actual start time is 2400 + 1800 = 4200 seconds.
-We use the same concept to track the seizure end times. We also keep track of the total
-number of sessions encountered, the total number of recordings across all records and
+Based on this information, we iteratively determine the cumulative duration of a session 
+comprising multiple recordings and for each record, we store a 'cumulative' start time of 
+a seizure. Let $t_{start}$ denote the start time of a seizure and $t_{end}$ be the end of 
+the ictal duratuion. For example, let us consider 2 recordings, one 2400 seconds long and 
+the second 3600 seconds long. If seizure 1 has a labeled start time of 1800 seconds in 
+recording 1, the start time of seizure 1 is 1800 seconds. However, if seizure 2 has a 
+labeled start time of 1800 seconds, the actual start time is 2400 + 1800 = 4200 seconds. 
+We use the same concept to track the seizure end times. We also keep track of the total 
+number of sessions encountered, the total number of recordings across all records and 
 the total number of seizures observed.
 
-Define the metadata paths and the actual data path
+Define the metadata paths and the actual data path 
 (which is one directory below the metadata path).
 '''
 
@@ -697,9 +697,9 @@ for file in txt_file_names_list:
 print("\nThe full paths to the first 10 files:")
 for x in txt_file_dirs_list[:10]:
     print(x)
-
+    
 # Extract text blobs and new line indexes
-txt_blks_annot_dict = {}
+txt_blks_annot_dict = {} 
 ind_lsts_nwlns_dict = {}
 edf_file_numbs_dict = {}
 list_of_keys = []
@@ -707,7 +707,7 @@ for fname in txt_file_dirs_list:
     key = fname.split('/')[-1][:-4]
     list_of_keys.append(key)
     with open(fname,'r') as f:
-        sum_txt = f.readlines()
+        sum_txt = f.readlines() 
         txt_blks_annot_dict[key] = sum_txt
     ind_lsts_nwlns_dict[key] =[i for i in range(len(sum_txt)) if sum_txt[i] == '\n']
 
@@ -733,7 +733,7 @@ seiz_cum_strt_time_list = [] # Store seizure cumulative start times in a list an
 seiz_cum_strt_time_dict = {'trn':[], 'vld':[], 'tst':[]} # Store train, validate, test start times independently
 seiz_cum_ends_time_list = [] # Store seizure cumulative end times in a list and dict
 seiz_cum_ends_time_dict = {'trn':[], 'vld':[], 'tst':[]} # Store train, validate, test end times independently
-seiz_cum_strt_time_dict_unsorted = {}
+seiz_cum_strt_time_dict_unsorted = {} 
 seiz_cum_ends_time_dict_unsorted = {}
 cnt_tot_sess = 0 # track count of total sessions
 cnt_tot_recs = 0 # track count of edf records
@@ -746,7 +746,7 @@ for dkey in list_of_keys:
     seiz_cum_strt_time_list.append([])          # Initialize cumulative start time dict to an empty list
     seiz_cum_ends_time_list.append([])          # Initialize cumulative end time dict to an empty list
     seiz_cum_strt_time_dict_unsorted[dkey] = [] #
-    seiz_cum_ends_time_dict_unsorted[dkey] = [] #
+    seiz_cum_ends_time_dict_unsorted[dkey] = [] #  
     for x in txt_blks_annot_dict[dkey]:         # Iterate over all text blocks
         if x[:9] == 'File Name':                # If a line starts with "File Name" (in the metadata file)
             cnt_tot_recs += 1                   # Increment the number of records
@@ -758,7 +758,7 @@ for dkey in list_of_keys:
             cnt_seiz_per_sess += num_of_seiz_in_rec  # Append the seizure count to the variable tracking cont per seizure
         if x[:13] == 'Seizure Start':                                           # if line starts with "Seizure Start"
             seiz_strt_time = float(x.split(' ')[-2].strip())                    # Current seizure start time
-            seiz_cum_strt_time_list[-1].append(seiz_strt_time+cum_tot_time_old) # Added to previous end time and appended
+            seiz_cum_strt_time_list[-1].append(seiz_strt_time+cum_tot_time_old) # Added to previous end time and appended 
         if x[:11] == 'Seizure End':
             seiz_ends_time = float(x.split(' ')[-2].strip())
             seiz_cum_ends_time_list[-1].append(seiz_ends_time+cum_tot_time_old)
@@ -793,7 +793,7 @@ num_of_sess_wi_seiz = len(cnt_sess_with_seiz_list)
 assert num_of_sess_no_seiz == len(pid_sess_zero_seiz_list)
 print(f'There are {num_of_sess_no_seiz} sessions with no seizures and {num_of_sess_wi_seiz} sessions with seizures.')
 print("The lengths of the list of patients with seizures, cumulative seizure start, seizure end and total record times:")
-print(len(seiz_cum_strt_time_list), len(seiz_cum_ends_time_list),
+print(len(seiz_cum_strt_time_list), len(seiz_cum_ends_time_list), 
       len(seiz_cum_ends_time_list), len(cum_time_with_seiz_list))
 
 '''
@@ -818,7 +818,7 @@ for tid in ['trn', 'vld', 'tst']:
     for x in count_seizures_gap_time_dict[tid][:16]:
         print(f'{x/60:04.2f}', end  = "\t")
     print()
-
+    
 trn_ids_count = 0
 vld_ids_count = 0
 tst_ids_count = 0
@@ -835,13 +835,13 @@ all_pat_session_cnt_dict = {'trn':{}, 'vld':{}, 'tst':{}}
 all_nonseiz_pat_ids_list = []
 
 for pid in pat_ids_lst:
-    all_pat_ids_dict[pid[:3]].append(pid)
+    all_pat_ids_dict[pid[:3]].append(pid) 
     dst_typ = pid[:3]
     pid_val = pid[4:]
     all_pat_session_cnt_dict[dst_typ][pid_val] = []
     for x in list_of_keys:
         if pid_val == x[4:7]:
-            all_pat_session_cnt_dict[dst_typ][pid_val].append(x)
+            all_pat_session_cnt_dict[dst_typ][pid_val].append(x)    
     if dst_typ == 'trn':
         trn_ids_count += 1
         trn_pat_ids_list.append(pid)
@@ -851,7 +851,7 @@ for pid in pat_ids_lst:
     if dst_typ == 'tst':
         tst_ids_count += 1
         tst_pat_ids_list.append(pid)
-
+        
 tot_ids_count = trn_ids_count + vld_ids_count + tst_ids_count
 tot_ids_dict_length = len(all_pat_ids_dict['trn']) + len(all_pat_ids_dict['vld']) + len(all_pat_ids_dict['tst'])
 
@@ -917,7 +917,7 @@ for pid in trn_pat_ids_list:
         trn_pats_zero_seizures_cnt += 1
         nonseiz_pat_ids_dict[pid[:3]].append(pid)
         all_nonseiz_pat_ids_list.append(pid)
-
+        
 for pid in vld_pat_ids_list:
     temp_session_count = 0
     temp_count_seiz_sess_per_pat = 0
@@ -943,7 +943,7 @@ for pid in vld_pat_ids_list:
         vld_pats_zero_seizures_cnt += 1
         nonseiz_pat_ids_dict[pid[:3]].append(pid)
         all_nonseiz_pat_ids_list.append(pid)
-
+        
 for pid in tst_pat_ids_list:
     temp_session_count = 0
     temp_count_seiz_sess_per_pat = 0
@@ -969,7 +969,7 @@ for pid in tst_pat_ids_list:
         tst_pats_zero_seizures_cnt += 1
         nonseiz_pat_ids_dict[pid[:3]].append(pid)
         all_nonseiz_pat_ids_list.append(pid)
-
+        
 pats_with_seizures_seizure_session_ids_dict = {}
 pats_with_seizures_nonseiz_session_ids_dict = {}
 for x in all_seizure_pat_ids_list:
@@ -1013,20 +1013,20 @@ print(sorted(set(preferred_gap_times_mins_list))+[45, 60, 90, 120])
 #******************************************************************************#
 #--------------------- Sec. 10: Create the Interim Dataset ---------------------#
 '''
-In the following cells, we enumerate the benchmarks and use them to generate
-the prefixes for the file names. In the next stage, we then try to calculate
-the gap time and enumerate the seizures that belong to each benchmark. Once
-we have those seizures, we figure out the session ID of each seizure and assign
-each seizure a "number" either implicitly via list ordering or explicitly via
-a count. For that particular benchmark, we calculate the preictal and interictal
-size depending upon the sph, sop and sampling durations. Initially, we double
-the preictal size to account for the interictal samples in a balanced manner
-and create 3D matrix of zeros of size L x 17 x N, where L is the number of
-preictal + interictal samples and N is the number of samples in each element
-which would be the sampling rate multiplied by the $SPH$.
+In the following cells, we enumerate the benchmarks and use them to generate 
+the prefixes for the file names. In the next stage, we then try to calculate 
+the gap time and enumerate the seizures that belong to each benchmark. Once 
+we have those seizures, we figure out the session ID of each seizure and assign 
+each seizure a "number" either implicitly via list ordering or explicitly via 
+a count. For that particular benchmark, we calculate the preictal and interictal 
+size depending upon the sph, sop and sampling durations. Initially, we double 
+the preictal size to account for the interictal samples in a balanced manner 
+and create 3D matrix of zeros of size L x 17 x N, where L is the number of 
+preictal + interictal samples and N is the number of samples in each element 
+which would be the sampling rate multiplied by the $SPH$.  
 
-We then focus on using the sampling rate dictionary to figure out what should
-be the data size for each initial intermediate array. Once we have the intermediate
+We then focus on using the sampling rate dictionary to figure out what should 
+be the data size for each initial intermediate array. Once we have the intermediate 
 array, depending on the sampling rate, we either upsample or downsample to 256 Hz.
 
 $F_s$ = 256 <br>
@@ -1036,7 +1036,7 @@ $SOP \in \{1, 2, 5\}$ minutes <br>
 $L_{pre} = F_s \times SPH$ <br>
 $L_{tot} = 2L_{pre}$ <br>
 $D =  L_{chs} \times L_{tot}$ <br>
-$S_i = \dfrac{60\times SPH}{T_w}$ for $i = 1, 2, \ldots, b$
+$S_i = \dfrac{60\times SPH}{T_w}$ for $i = 1, 2, \ldots, b$ 
 and $b \in \mathcal{B} = \{1, \ldots, B\}$ where $B = 12$ <br>
 '''
 
@@ -1070,7 +1070,7 @@ f15_labs_labl_strg = 'labels'
 
 f16_feat_hdf5_strg = 'hdf5'
 f16_feat_nmpy_strg = 'npy'
-f16_labs_frmt_strg = 'csv'
+f16_labs_frmt_strg = 'csv' 
 
 prefix = (f"{f01_dset_name_strg}_{f02_dtyp_intr_strg}_{f03_scld_stat_strg}_"
           f"{f04_filt_stat_strg}_{f05_blnc_stat_strg}_{f06_srat_strg_strg}")
@@ -1134,20 +1134,7 @@ for i in range(num_of_bmrks):
                     act_gap_time = x_list[j] - 0
                 else:
                     act_gap_time = x_list[j] - y_list[j-1]
-
-                # Adaptive gap time requirement for better data availability
-                # BM01-BM06: Use 50% of required gap (more lenient for small SPH)
-                # BM07-BM09: Use 75% of required gap (moderate requirement)
-                # BM10-BM12: Use 100% of required gap (original strict requirement)
-                if i < 6:  # For BM01-BM06
-                    min_gap_factor = 0.5
-                elif i < 9:  # For BM07-BM09
-                    min_gap_factor = 0.75
-                else:  # For BM10-BM12
-                    min_gap_factor = 1.0
-
-                min_gap_required = gap_len_mins * 60 * min_gap_factor
-                if act_gap_time >= min_gap_required:
+                if act_gap_time >= gap_len_mins*60:
                     # cur_samp_rate = sampling_rate_dict[dkey][0]
                     seiz_cum_strt_time_sph_mins_list.append(x_list[j])
                     pres_cum_strt_temp_sph_mins = x_list[j]-(gap_len_mins*60)
@@ -1159,8 +1146,8 @@ for i in range(num_of_bmrks):
                     # pres_cum_strt_time_sph_mins_list.append(pres_cum_strt_temp_sph_mins)
                     # pres_cum_strt_samp_sph_mins_list.append(int(pres_cum_strt_time_sph_mins_list[-1]*cur_samp_rate))
                     npy_file_dirs_list.append(f'{mont_path}{dkey}.npy')
-                    cnt_dset_bmrk_dict[dkey[:3]][i] += 1
-                    cnt_tots_bmrk_list[i] += 1
+                    cnt_dset_bmrk_dict[dkey[:3]][i] += 1 
+                    cnt_tots_bmrk_list[i] += 1                   
                 # print(npy_file_dirs_list[-1])
     npy_file_dirs_dict[benchmark_id] = npy_file_dirs_list
     seiz_cum_strt_time_sph_mins_dict[benchmark_id] = seiz_cum_strt_time_sph_mins_list
@@ -1168,18 +1155,19 @@ for i in range(num_of_bmrks):
     pres_cum_strt_samp_sph_mins_dict[benchmark_id] = pres_cum_strt_samp_sph_mins_list
     print(len(npy_file_dirs_dict[benchmark_id]))
     # print(benchmark_prefix)
-
+    
 train_valid_or_test_dict = {"trn": "train", "vld": "valid", "tst": "tests"}
 cnt_vals_bmrk_dict = {"trn": num_of_bmrks*[0], "vld": num_of_bmrks*[0], "tst": num_of_bmrks*[0]}
 tot_sng_fld_size_list = num_of_bmrks*[0]
 for i in range(len(bnchmrk_names_list)-1, -1, -1):
-#for i in range(11, 9, -1):
+    print(f"Section 10: Processing benchmark {i+1}/12 ({bnchmrk_names_list[i]})")
+##for i in range(11, 9, -1):
     benchmark_id = bnchmrk_names_list[i]
-    npy_file_dirs_list = npy_file_dirs_dict[benchmark_id]
+    npy_file_dirs_list = npy_file_dirs_dict[benchmark_id] 
     sph_len_mins = benchmark_tot_list[i][0]
     sop_len_mins = benchmark_tot_list[i][1]
     gap_len_mins = sph_len_mins + sop_len_mins
-
+    
     f07_bmrk_idnm_strg = benchmark_id # "bmrk{:02d}".format(benchmark_id)
     f08_spht_secs_strg = "sph{:02d}m".format(sph_len_mins)
     f09_sopt_secs_strg = "sop{:02d}m".format(sop_len_mins)
@@ -1263,8 +1251,8 @@ print('Sizes:',tot_sng_fld_size_list)
 #******************************************************************************#
 #-------------- Sec. 11: Create the Single-Fold ML-Ready Dataset --------------#
 '''
-In the following cells, we enumerate the benchmarks and use them to generate
-the prefixes for the file names. In the next stage, we then try to calculate
+In the following cells, we enumerate the benchmarks and use them to generate 
+the prefixes for the file names. In the next stage, we then try to calculate 
 the gap time and enumerate the seizures that belong to each benchmark.
 
 Sampling rate $F_s$ = 256 <br>
@@ -1274,18 +1262,18 @@ $SOP \in \{1, 2, 5\}$ minutes <br>
 Number of channels $C = 20$ <br>
 Total samples in every window $L = F_s \times T_w$ <br>
 Size of 2d EEG data for every window $D =  C \times L$ <br>
-Number of preictal samples associated with each seizure
+Number of preictal samples associated with each seizure 
 $S_{pre} = \dfrac{60\times SPH}{T_w}$ <br>
-Number of interictal samples are equal to the number
-of preictal samples in the balanced version.
+Number of interictal samples are equal to the number 
+of preictal samples in the balanced version. 
 Therefore $S_{int} = S_{pre}$. <br>
-Total 2d elements in each seizure in the $i^{th}$ benchmark
+Total 2d elements in each seizure in the $i^{th}$ benchmark 
 $S_i = \dfrac{2\times 60\times SPH}{T_w}$ <br>
 Each benchmark $i$ for $i = 1, 2, \ldots, B$ where $B = 12$ for our case. <br>
 
-In each benchmark $i$, there are a total of $S_i$ data points, preictal and interictal
+In each benchmark $i$, there are a total of $S_i$ data points, preictal and interictal 
 combined for each seizure and each $i^{th}$ data point contains a 2d element of size $D$. <br>
-For each $i^{th}$ benchmark, there will be $N_{trn,i}$, $N_{vld,i}$ and $N_{tst,i}$
+For each $i^{th}$ benchmark, there will be $N_{trn,i}$, $N_{vld,i}$ and $N_{tst,i}$ 
 training, validation and test seizures, respectively.  <br>
 Total 2d elements needed to be stored in each single fold will then be: <br>
 Training: $N_{trn,i}\times S_i$ <br>
@@ -1327,7 +1315,7 @@ print(tests_values_suffix,tests_labels_suffix)
 print()
 print(values_suffix)
 print(labels_suffix)
-
+          
 smp_rte_secs = 256
 win_len_secs = 5
 num_of_chans = 20
@@ -1338,35 +1326,36 @@ crss_val_fld = 0
 f13_cval_fold_strg = "fold{:02d}".format(crss_val_fld)
 path_list_all_bmarks = os.listdir(intr_path)
 for i in range(len(bnchmrk_names_list)-1, -1, -1):
-#for i in range(11, 9, -1):
+    print(f"Section 10: Processing benchmark {i+1}/12 ({bnchmrk_names_list[i]})")
+##for i in range(11, 9, -1):
     benchmark_id = bnchmrk_names_list[i]
     tot_sng_fld_size = tot_sng_fld_size_list[i]
     n_trn_i = cnt_vals_bmrk_dict["trn"][i]
     n_vld_i = cnt_vals_bmrk_dict["vld"][i]
     n_tst_i = cnt_vals_bmrk_dict["tst"][i]
-
+     
     sph_len_mins = benchmark_tot_list[i][0]
     sop_len_mins = benchmark_tot_list[i][1]
     gap_len_mins = sph_len_mins + sop_len_mins
-
+    
     s_i = 2*60*sph_len_mins//win_len_secs
     si_by_two = s_i//2
     train_fold_depth = n_trn_i*s_i
     valid_fold_depth = n_vld_i*s_i
     tests_fold_depth = n_tst_i*s_i
-
+    
     temp_array_train = np.zeros((train_fold_depth, smps_per_win, num_of_chans))
     temp_array_valid = np.zeros((valid_fold_depth, smps_per_win, num_of_chans))
     temp_array_tests = np.zeros((tests_fold_depth, smps_per_win, num_of_chans))
     temp_labls_train = np.zeros(train_fold_depth)
     temp_labls_valid = np.zeros(valid_fold_depth)
     temp_labls_tests = np.zeros(tests_fold_depth)
-
+    
     count_dset_type = {"trn": 0, "vld": 0, "tst": 0}
     count_train = 0
     count_valid = 0
     count_tests = 0
-
+    
     for f in path_list_all_bmarks:
         if f.split('_')[6] == benchmark_id:
             temp_array_read = np.load(intr_path+f)
@@ -1388,11 +1377,11 @@ for i in range(len(bnchmrk_names_list)-1, -1, -1):
                 temp_labls_tests[start_index:start_index+si_by_two] = 1
     print()
     try:
-        assert (n_trn_i == count_dset_type["trn"] and n_vld_i == count_dset_type["vld"]
+        assert (n_trn_i == count_dset_type["trn"] and n_vld_i == count_dset_type["vld"] 
                 and n_tst_i == count_dset_type["tst"])
     except AssertionError:
         print("Failed one or more assertions")
-
+    
     f07_bmrk_idnm_strg = benchmark_id # "bmrk{:02d}".format(benchmark_id)
     f08_spht_secs_strg = "sph{:02d}m".format(sph_len_mins)
     f09_sopt_secs_strg = "sop{:02d}m".format(sop_len_mins)
@@ -1407,11 +1396,11 @@ for i in range(len(bnchmrk_names_list)-1, -1, -1):
     print(temp_array_train.shape, temp_array_valid.shape, temp_array_tests.shape)
     print(count_dset_type)
     print()
-
+    
     X_trn_hdf = h5py.File(f"{sf00_path}{prefix}_{benchmark_prefix}_{train_values_suffix}",'w')
     X_trn_hdf.create_dataset('tracings', data = temp_array_train)
-    X_trn_hdf.close()
-
+    X_trn_hdf.close()  
+    
     with open(f"{sf00_path}{prefix}_{benchmark_prefix}_{train_labels_suffix}", 'w') as csvfile:
         csvwriter = csv.writer(csvfile)
         A = []
@@ -1419,11 +1408,11 @@ for i in range(len(bnchmrk_names_list)-1, -1, -1):
             A. append([x])
         #print(A)
         csvwriter.writerows(A)
-
+    
     X_vld_hdf = h5py.File(f"{sf00_path}{prefix}_{benchmark_prefix}_{valid_values_suffix}",'w')
     X_vld_hdf.create_dataset('tracings', data = temp_array_valid)
-    X_vld_hdf.close()
-
+    X_vld_hdf.close()  
+    
     with open(f"{sf00_path}{prefix}_{benchmark_prefix}_{valid_labels_suffix}", 'w') as csvfile:
         csvwriter = csv.writer(csvfile)
         A = []
@@ -1431,11 +1420,11 @@ for i in range(len(bnchmrk_names_list)-1, -1, -1):
             A. append([x])
         #print(A)
         csvwriter.writerows(A)
-
+    
     X_tst_hdf = h5py.File(f"{sf00_path}{prefix}_{benchmark_prefix}_{tests_values_suffix}",'w')
     X_tst_hdf.create_dataset('tracings', data = temp_array_tests)
-    X_tst_hdf.close()
-
+    X_tst_hdf.close()  
+    
     with open(f"{sf00_path}{prefix}_{benchmark_prefix}_{tests_labels_suffix}", 'w') as csvfile:
         csvwriter = csv.writer(csvfile)
         A = []
