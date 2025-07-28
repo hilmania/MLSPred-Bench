@@ -41,6 +41,46 @@ si_by_two = s_i // 2  # Half of segments (preictal portion)
 # Segments si_by_two to (s_i-1): label = 0 (interictal)
 ```
 
+#### **Penentuan Jumlah Preictal Segments:**
+```python
+# BM01 example: SPH = 2 minutes
+sph_len_mins = 2          # SPH duration in minutes
+win_len_secs = 5          # Segment duration in seconds
+
+# Step 1: Convert SPH to seconds
+sph_len_secs = sph_len_mins * 60 = 2 * 60 = 120 seconds
+
+# Step 2: Calculate number of preictal segments
+preictal_segments = sph_len_secs // win_len_secs
+preictal_segments = 120 // 5 = 24 segments
+
+# Step 3: Balanced dataset - same number for interictal
+interictal_segments = preictal_segments = 24 segments
+
+# Step 4: Total segments per seizure
+total_segments = preictal_segments + interictal_segments = 24 + 24 = 48
+
+# Formula derivation for any benchmark:
+preictal_count = (SPH_minutes * 60) / segment_duration
+                = (SPH_minutes * 60) / 5
+                = SPH_minutes * 12
+```
+
+#### **Contoh Perhitungan per Benchmark:**
+```python
+# BM01-BM03: SPH = 2 minutes
+preictal_segments = 2 * 12 = 24 segments
+
+# BM04-BM06: SPH = 5 minutes
+preictal_segments = 5 * 12 = 60 segments
+
+# BM07-BM09: SPH = 15 minutes
+preictal_segments = 15 * 12 = 180 segments
+
+# BM10-BM12: SPH = 30 minutes
+preictal_segments = 30 * 12 = 360 segments
+```
+
 #### **Contoh Konkret per Benchmark:**
 
 | Benchmark | SPH (min) | Segments per Seizure | Preictal Labels (1) | Interictal Labels (0) |
@@ -114,6 +154,28 @@ Total labels per CSV = Number_of_seizures × Segments_per_seizure
   - 240 labels = 0 (interictal)
 ```
 
+#### **Perhitungan Durasi Total:**
+```python
+# Example: BM01 dengan 7200 rows
+total_segments = 7200
+segment_duration = 5  # seconds per segment
+
+# Total duration calculation:
+total_duration_seconds = total_segments × segment_duration
+total_duration_seconds = 7200 × 5 = 36,000 seconds
+
+# Convert to hours:
+total_duration_hours = 36,000 ÷ 3600 = 10 hours
+
+# Breakdown:
+seizures_count = total_segments ÷ segments_per_seizure
+seizures_count = 7200 ÷ 48 = 150 seizures
+
+# Duration per seizure in BM01:
+duration_per_seizure = 48 × 5 = 240 seconds = 4 minutes
+# (2 min preictal + 2 min interictal from different recording)
+```
+
 ### **Temporal Arrangement**
 
 #### **Label Sequence per Seizure:**
@@ -124,14 +186,32 @@ Seizure 2: [1,1,1,...,1,0,0,0,...,0]  (24 ones + 24 zeros for BM01)
 Seizure N: [1,1,1,...,1,0,0,0,...,0]  (24 ones + 24 zeros for BM01)
 ```
 
-#### **Complete Label File Structure:**
+#### **IMPORTANT: Data Organization Pattern**
+**TIDAK berurutan 5 jam preictal + 5 jam interictal!**
+
+**Pattern yang benar: Alternating per seizure**
 ```
-Row 1-24:     1 (Seizure 1 preictal)
-Row 25-48:    0 (Seizure 1 interictal)
-Row 49-72:    1 (Seizure 2 preictal)
-Row 73-96:    0 (Seizure 2 interictal)
+POLA SEBENARNYA (BM01 example dengan 150 seizures):
+Row 1-24:     1 (Seizure 1 preictal - 2 menit)
+Row 25-48:    0 (Seizure 1 interictal - 2 menit)
+Row 49-72:    1 (Seizure 2 preictal - 2 menit)
+Row 73-96:    0 (Seizure 2 interictal - 2 menit)
+Row 97-120:   1 (Seizure 3 preictal - 2 menit)
+Row 121-144:  0 (Seizure 3 interictal - 2 menit)
 ...
+Row 7153-7176: 1 (Seizure 150 preictal - 2 menit)
+Row 7177-7200: 0 (Seizure 150 interictal - 2 menit)
+
+BUKAN:
+❌ Row 1-3600: ALL preictal (5 jam)
+❌ Row 3601-7200: ALL interictal (5 jam)
+
+TAPI:
+✅ Alternating: preictal-interictal-preictal-interictal...
+✅ Total: 150×2min preictal + 150×2min interictal = 10 jam
 ```
+
+#### **Complete Label File Structure:**
 
 ### **Balanced Dataset Guarantee**
 
